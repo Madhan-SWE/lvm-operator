@@ -673,14 +673,14 @@ func (r *VGReconciler) updateStatus(ctx context.Context, vgStatus *lvmv1alpha1.V
 // error
 func (r *VGReconciler) filterAvailableDevices(blockDevices []internal.BlockDevice) ([]internal.BlockDevice, []internal.BlockDevice, error) {
 	var availableDevices, delayedDevices []internal.BlockDevice
-	r.Log.Info("filterAvailableDevices: blockDevices: ", blockDevices)
+	fmt.Printf("filterAvailableDevices: blockDevices: %v", blockDevices)
 	// using a label so `continue DeviceLoop` can be used to skip devices
 DeviceLoop:
 	for _, blockDevice := range blockDevices {
 
 		// store device in deviceAgeMap
 		r.deviceAgeMap.storeDeviceAge(blockDevice.KName)
-		r.Log.Info("Has Children: ", blockDevice.HasChildren)
+		r.Log.Info("Has Children: ", blockDevice.HasChildren())
 		// check for partitions recursively
 		if blockDevice.HasChildren() {
 			childAvailableDevices, childDelayedDevices, err := r.filterAvailableDevices(blockDevice.Children)
