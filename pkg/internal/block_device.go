@@ -72,6 +72,7 @@ type BlockDevice struct {
 // ListBlockDevices using the lsblk command
 func ListBlockDevices(exec Executor) ([]BlockDevice, error) {
 	// var output bytes.Buffer
+	fmt.Printf("ListBlockDevices: ")
 	var blockDeviceMap map[string][]BlockDevice
 	columns := "NAME,ROTA,TYPE,SIZE,MODEL,VENDOR,RO,STATE,KNAME,SERIAL,PARTLABEL,FSTYPE"
 	args := []string{"--json", "--paths", "-o", columns}
@@ -86,6 +87,7 @@ func ListBlockDevices(exec Executor) ([]BlockDevice, error) {
 		return []BlockDevice{}, err
 	}
 
+	fmt.Println("blockDeviceMap", blockDeviceMap)
 	return blockDeviceMap["blockdevices"], nil
 }
 
