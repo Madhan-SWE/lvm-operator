@@ -573,6 +573,7 @@ func (r *VGReconciler) getMatchingDevicesForVG(volumeGroup *lvmv1alpha1.LVMVolum
 		return nil, nil, fmt.Errorf("failed to list block devices: %v", err)
 	}
 
+	fmt.Printf("getMatchingDevicesForVG: Block devices: %v", blockDevices)
 	// filter out block devices
 	remainingValidDevices, delayedDevices, err := r.filterAvailableDevices(blockDevices)
 	if err != nil {

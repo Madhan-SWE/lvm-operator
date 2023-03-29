@@ -17,6 +17,7 @@ limitations under the License.
 package vgmanager
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/openshift/lvm-operator/pkg/internal"
@@ -38,6 +39,7 @@ const (
 // but they aren't expected to use it
 // they verify that the device itself is good to use
 var FilterMap = map[string]func(internal.BlockDevice, internal.Executor) (bool, error){
+	fmt.Printf("FilterMap for block Device: %v", internal.BlockDevice)
 	notReadOnly: func(dev internal.BlockDevice, _ internal.Executor) (bool, error) {
 		readOnly, err := dev.IsReadOnly()
 		return !readOnly, err
