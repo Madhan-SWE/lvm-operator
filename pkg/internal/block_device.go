@@ -155,7 +155,10 @@ func (b BlockDevice) IsReadOnly() (bool, error) {
 
 // HasChildren checks if the disk has partitions
 func (b BlockDevice) HasChildren() bool {
-	fmt.Printf("Has Children: Block device: %v", b)
+	fmt.Printf("============= Has Children: =============== \n Block device: %+v \n", b)
+	fmt.Printf(" --- Children: %+v", b.Children)
+	fmt.Printf(" --- len(b.Children) : %d", len(b.Children))
+	fmt.Printf("========================================================================")
 	return len(b.Children) > 0
 }
 

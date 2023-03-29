@@ -573,7 +573,7 @@ func (r *VGReconciler) getMatchingDevicesForVG(volumeGroup *lvmv1alpha1.LVMVolum
 		return nil, nil, fmt.Errorf("failed to list block devices: %v", err)
 	}
 
-	fmt.Printf("getMatchingDevicesForVG: Block devices: %v", blockDevices)
+	fmt.Printf("getMatchingDevicesForVG: Block devices: %+v", blockDevices)
 	// filter out block devices
 	remainingValidDevices, delayedDevices, err := r.filterAvailableDevices(blockDevices)
 	if err != nil {
@@ -674,20 +674,23 @@ func (r *VGReconciler) updateStatus(ctx context.Context, vgStatus *lvmv1alpha1.V
 // error
 func (r *VGReconciler) filterAvailableDevices(blockDevices []internal.BlockDevice) ([]internal.BlockDevice, []internal.BlockDevice, error) {
 	var availableDevices, delayedDevices []internal.BlockDevice
-	fmt.Printf("filterAvailableDevices: blockDevices: %v", blockDevices)
+	fmt.Printf(" - - - - - - - filterAvailableDevices: blockDevices: %+v", blockDevices)
 	// using a label so `continue DeviceLoop` can be used to skip devices
 DeviceLoop:
 	for _, blockDevice := range blockDevices {
 
 		// store device in deviceAgeMap
 		r.deviceAgeMap.storeDeviceAge(blockDevice.KName)
-		r.Log.Info("Has Children: ", blockDevice.HasChildren())
+		fmt.Printf("+++++ Block device: %+v", blockDevice)
+		fmt.Printf("++++++ Has Children: %v", blockDevice.HasChildren())
+
 		// check for partitions recursively
 		if blockDevice.HasChildren() {
 			childAvailableDevices, childDelayedDevices, err := r.filterAvailableDevices(blockDevice.Children)
 			if err != nil {
 				return []internal.BlockDevice{}, []internal.BlockDevice{}, err
 			}
+
 			availableDevices = append(availableDevices, childAvailableDevices...)
 			delayedDevices = append(delayedDevices, childDelayedDevices...)
 		}
