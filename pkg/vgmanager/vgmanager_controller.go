@@ -690,7 +690,6 @@ DeviceLoop:
 			if err != nil {
 				return []internal.BlockDevice{}, []internal.BlockDevice{}, err
 			}
-
 			availableDevices = append(availableDevices, childAvailableDevices...)
 			delayedDevices = append(delayedDevices, childDelayedDevices...)
 		}
@@ -701,11 +700,13 @@ DeviceLoop:
 			var err error
 			filterLogger := devLogger.WithValues("filter.Name", name)
 			valid, err = filter(blockDevice, r.executor)
+			fmt.Printf("! ! ! ! ! ! dev: %s filter: %s valid: %v err: %v", blockDevice.Name, name, valid, err)
 			if err != nil {
 				filterLogger.Error(err, "filter error")
 				valid = false
 				continue DeviceLoop
 			} else if !valid {
+				fmt.Printf("! ! ! ! ! ! Filter not Valid : %s for dev: %s", name, blockDevice.Name)
 				filterLogger.Info("does not match filter")
 				continue DeviceLoop
 			}
